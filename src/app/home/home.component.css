@@ -1,0 +1,6 @@
+/* Exibe o dropdown ao passar o mouse */
+.nav-item.dropdown:hover > .dropdown-menu {
+    display: block;
+    margin-top: 0; /* Ajusta se necessário */
+  }
+  
