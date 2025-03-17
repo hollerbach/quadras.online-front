@@ -1,10 +1,12 @@
 import { Routes } from '@angular/router';
-import { LoginComponent } from './login/login.component';
+import { LoginComponent } from './auth/login/login.component';
+import { RecoverComponent } from './auth/recover/recover.component';
 import { HomeComponent } from './home/home.component';
 import { ProfileComponent } from './profile/profile.component';
 
 export const routes: Routes = [
-  { path: 'login', component: LoginComponent },
+  { path: 'auth/login', component: LoginComponent },
+  { path: 'auth/recover', component: RecoverComponent },
   { path: 'profile', component: ProfileComponent },
   { path: 'home', component: HomeComponent },
   { path: '', redirectTo: 'home', pathMatch: 'full' }, // Redireciona para login por padrão

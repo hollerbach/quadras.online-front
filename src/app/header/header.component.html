@@ -57,7 +57,7 @@
         <div class="container-fluid">
             <a class="navbar-brand d-flex" href="/" style="font-size: 20px;">
                 <img src="75639887.svg" alt="Mercearia Digital" width="50" height="32">
-                Mercearia Digital
+                {{ appTitle }}
             </a>
 
             <ul *ngIf="showMenus" class="nav col-12 col-lg-auto mb-2 justify-content-end mb-md-0 ms-auto">
@@ -164,8 +164,8 @@
             </ul>
 
             <div *ngIf="showMenus" class="col-md-3 text-end">
-                <button type="button" class="btn btn-outline-primary me-2" routerLink="login.">Entrar</button>
-                <button type="button" class="btn btn-primary">Assinar</button>
+                <button type="button" class="btn btn-outline-primary me-2 rounded-pill px-4" routerLink="/auth/login">Entrar</button>
+                <button type="button" class="btn btn-primary rounded-pill px-4">Assinar</button>
             </div>
         </div>
     </nav>

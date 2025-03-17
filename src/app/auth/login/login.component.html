@@ -1,0 +1,27 @@
+<app-header [showMenus]="false"></app-header>
+
+<div class="d-flex justify-content-center align-items-center" style="min-height: 40vh;">
+  <div class="card card-login p-4">
+    <main class="form-signin">
+      <form>
+        <h1 class="h2 mb-3 fw-bold text-center">Entrar</h1>
+        <p class="mb-4 text-center">Informe seu e-mail e senha para acessar a plataforma</p>
+        <div class="form-floating mb-3">
+          <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+          <label for="floatingInput">Endereço de e-mail</label>
+        </div>
+        <div class="form-floating mb-3">
+          <input type="password" class="form-control" id="floatingPassword" placeholder="Senha">
+          <label for="floatingPassword">Senha</label>
+        </div>
+        <div class="btn-wrapper gap-4 justify-content-center">
+          <button type="button" class="btn btn-secondary rounded-pill px-5" routerLink="/">Voltar</button>
+          <button type="button" class="btn btn-primary rounded-pill px-5">Entrar</button>
+        </div>
+        <div class="text-center mt-3">
+          <button type="button" class="btn btn-link" routerLink="/auth/recover">Esqueci minha senha</button>
+        </div>
+      </form>
+    </main>
+  </div>
+</div>

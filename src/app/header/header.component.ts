@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { RouterLink, Router, NavigationEnd } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-header',
@@ -11,9 +12,17 @@ import { CommonModule } from '@angular/common';
 export class HeaderComponent implements OnInit {
   @Input() showMenus: boolean = true;
 
-  constructor(private router: Router) {}
+  public appTitle: string = '';
+
+  constructor(
+    private titleService: Title,
+    private router: Router
+  ) {}
 
   ngOnInit() {
+    // Recupera o título definido globalmente
+    this.appTitle = this.titleService.getTitle();
+
     // Se desejar manter alguma lógica de verificação de rota, ajuste-a conforme necessário.
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
