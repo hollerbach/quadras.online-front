@@ -1,10 +1,8 @@
-<app-header [showMenus]="false"></app-header>
-
-<div class="d-flex justify-content-center align-items-center" style="min-height: 40vh;">
+<div class="d-flex justify-content-center align-items-center" style="min-height: 100vh;">
   <div class="card card-login p-4">
     <main class="form-signin">
       <form>
-        <h1 class="h2 mb-3 fw-bold text-center">Entrar</h1>
+        <h1 class="h2 mb-3 fw-bold text-center">Acessar a Conta</h1>
         <p class="mb-4 text-center">Informe seu e-mail e senha para acessar a plataforma</p>
         <div class="form-floating mb-3">
           <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
@@ -14,13 +12,41 @@
           <input type="password" class="form-control" id="floatingPassword" placeholder="Senha">
           <label for="floatingPassword">Senha</label>
         </div>
-        <div class="btn-wrapper gap-4 justify-content-center">
-          <button type="button" class="btn btn-secondary rounded-pill px-5" routerLink="/">Voltar</button>
-          <button type="button" class="btn btn-primary rounded-pill px-5">Entrar</button>
+
+        <div class="form-check text-start my-3">
+          <input class="form-check-input" type="checkbox" value="remember-me" id="flexCheckDefault">
+          <label class="form-check-label" for="flexCheckDefault">
+            Lembre-se de mim
+          </label>
         </div>
-        <div class="text-center mt-3">
-          <button type="button" class="btn btn-link" routerLink="/auth/recover">Esqueci minha senha</button>
+
+        <button class="btn btn-primary w-100 py-2" type="submit">Entrar</button>
+
+        <div class="d-flex justify-content-between gap-md-5 mt-4">
+          <a href="#" class="btn-link text-decoration-none" routerLink="/auth/recover">Esqueci minha senha</a>
+          <a href="@" class="btn-link text-decoration-none" routerLink="/auth/create">Criar uma nova conta</a>
         </div>
+
+        <div class="d-flex align-items-center justify-content-between border-top pt-3 mt-3">
+          <h5 class="m-0">Login with</h5>
+
+          <!-- Social media buttons -->
+          <div class="ms-3">
+            <a href="#" class="btn btn-sm btn-icon btn-hover btn-primary text-inherit">
+                <i class="facebook" style="font-size: 3rem; color: cornflowerblue;"></i>
+            </a>
+            <a href="#" class="btn btn-sm btn-icon btn-hover btn-info text-inherit">
+                <i class="twitter" style="font-size: 3rem; color: cornflowerblue;"></i>
+            </a>
+            <a href="#" class="btn btn-sm btn-icon btn-hover btn-danger text-inherit">
+                <i class="google fs-5"></i>
+            </a>
+            <a href="#" class="btn btn-sm btn-icon btn-hover btn-warning text-inherit">
+                <i class="instagram fs-5"></i>
+            </a>
+          </div>
+        </div>
+
       </form>
     </main>
   </div>
