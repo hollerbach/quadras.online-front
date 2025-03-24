@@ -1,19 +1,20 @@
-<app-header [showMenus]="false"></app-header>
-
-<div class="d-flex justify-content-center align-items-center" style="min-height: 40vh;">
+<div class="d-flex justify-content-center align-items-center" style="min-height: 100vh;">
   <div class="card card-login p-4">
     <main class="form-signin">
       <form>
         <h1 class="h2 mb-3 fw-bold text-center">Esqueceu sua senha ?</h1>
-        <p class="mb-4 text-center">Informe seu email de cadastro e lhe enviaremos as instruções para a recuperação</p>
+        <p class="mb-4 text-center text-gray">Informe o e-mail de cadastro e enviaremos instruções para recuperação</p>
         <div class="form-floating mb-3">
           <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
           <label for="floatingInput">Endereço de e-mail</label>
         </div>
-        <div class="btn-wrapper gap-4 justify-content-center">
-          <button type="button" class="btn btn-secondary rounded-pill px-5" routerLink="/">Voltar</button>
-          <button type="button" class="btn btn-primary rounded-pill px-5">Enviar</button>
+
+        <button class="btn btn-primary w-100 py-2" type="submit">Enviar</button>
+
+        <div class="d-flex justify-content-center gap-md-5 mt-4">
+          <a class="btn-link text-decoration-none" routerLink="/auth/login">Retornar ao Entrar</a>
         </div>
+
       </form>
     </main>
   </div>

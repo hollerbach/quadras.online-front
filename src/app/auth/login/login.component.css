@@ -24,3 +24,7 @@ body {
   padding: 0;
   font-size: 0.9rem;
 }
+
+.text-gray {
+  color: #6c757d !important; /* Cinza padrão, semelhante ao text-muted do Bootstrap */
+}
