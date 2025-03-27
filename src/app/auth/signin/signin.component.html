@@ -1,1 +1,78 @@
-<p>signin works!</p>
+<div class="d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+    <div class="card card-signin p-4">
+        <main class="form-signin">
+            <h1 class="h2 mb-3 fw-bold text-center">Criar a Conta</h1>
+            <p class="mb-3 text-gray">Informe e-mail e senha para acessar a plataforma</p>
+            <form>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="firstName" placeholder="Nome">
+                            <label for="firstName">Nome</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="lastName" placeholder="Sobrenome">
+                            <label for="lastName">Sobrenome</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="email" class="form-control" id="floatingInput" placeholder="nome@example.com.br">
+                    <label for="floatingInput">Endereço de e-mail</label>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-floating mb-3">
+                            <input type="password" class="form-control" id="floatingPassword" placeholder="Senha">
+                            <label for="floatingPassword">Senha</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-floating mb-3">
+                            <input type="password" class="form-control" id="floatingPasswordCheck" placeholder="Confirme">
+                            <label for="floatingPasswordCheck">Confirme a Senha</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-check text-start my-3">
+                    <input class="form-check-input" type="checkbox" value="remember" id="flexCheckDefault">
+                    <label class="form-check-label text-gray" for="flexCheckDefault">
+                        Concordo com os
+                    </label>
+                    <a class="btn-link text-decoration-none" routerLink="/"> Temos e Condições</a>
+                </div>
+
+                <button class="btn btn-primary w-100 py-2" type="submit">Registrar</button>
+            </form>
+
+            <div class="d-flex justify-content-between gap-md-5 mt-4">
+                <p class="text text-gray">Já possui uma conta ?</p>
+                <a class="btn-link text-decoration-none" routerLink="/auth/login">Acessar a conta</a>
+            </div>
+
+            <div class="d-flex align-items-center justify-content-between border-top pt-3 mt-3">
+                <h6 class="m-0">Criar com</h6>
+
+                <!-- Social media buttons -->
+                <div class="ms-3 d-flex gap-3">
+                    <a href="#" class="btn btn-sm btn-icon btn-hover btn-danger text-inherit">
+                        <i class="bi bi-google fs-6"></i>
+                    </a>
+                    <a href="#" class="btn btn-sm btn-icon btn-hover btn-primary text-inherit">
+                        <i class="bi bi-facebook fs-6"></i>
+                    </a>
+                    <a href="#" class="btn btn-sm btn-icon btn-hover btn-primary text-inherit">
+                        <i class="bi bi-instagram fs-6"></i>
+                    </a>
+                    <a href="#" class="btn btn-sm btn-icon btn-hover btn-info text-inherit">
+                        <i class="bi bi-twitter-x fs-6"></i>
+                    </a>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>

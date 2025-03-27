@@ -1,0 +1,17 @@
+.btn-wrapper {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1.5rem;
+}
+
+.btn-link {
+    padding: 0;
+    font-size: 0.9rem;
+}
+
+.text-gray {
+    color: #6c757d !important;
+    padding: 0;
+    font-size: 0.9rem;
+    margin: 0;
+}
