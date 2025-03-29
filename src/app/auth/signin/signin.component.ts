@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewEncapsulation  } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
@@ -6,7 +6,8 @@ import { CommonModule } from '@angular/common';
   selector: 'app-signin',
   imports: [RouterLink, CommonModule],
   templateUrl: './signin.component.html',
-  styleUrl: './signin.component.css'
+  styleUrl: './signin.component.css',
+  encapsulation: ViewEncapsulation.None // Desabilita o encapsulamento
 })
 export class SigninComponent {
   showPassword = false;

@@ -1,5 +1,5 @@
 <div class="d-flex justify-content-center align-items-center" style="min-height: 100vh;">
-    <div class="card card-signin p-4">
+    <div class="card card-signin px-5 py-2">
         <main class="form-signin">
             <h1 class="h2 mb-3 fw-bold text-center">Criar a Conta</h1>
             <p class="mb-3 text-gray text-center">Informe os dados abaixo para registro na plataforma</p>
@@ -23,7 +23,7 @@
                     <label for="floatingInput">Endereço de e-mail</label>
                 </div>
 
-                <div class="mb-3">
+                <div class="mb-4">
                     <div class="form-floating position-relative">
                         <input class="form-control" id="floatingPassword" [type]="showPassword ? 'text' : 'password'"
                             placeholder="Senha">
@@ -49,41 +49,24 @@
                     </small>
                 </div>
 
-                <div class="form-check text-start my-3">
-                    <input class="form-check-input" type="checkbox" value="remember" id="flexCheckDefault">
-                    <label class="form-check-label text-gray" for="flexCheckDefault">
-                        Concordo com os
-                    </label>
-                    <a class="btn-link text-decoration-none" routerLink="/"> Temos e Condições</a>
-                </div>
-
                 <button class="btn btn-primary w-100 py-2" type="submit">Registrar</button>
             </form>
 
-            <div class="d-flex justify-content-between gap-md-5 mt-4">
+            <div class="divider"><span>ou</span></div>
+
+            <div class="d-flex align-items-center">
+                <a href="#" class="google-btn">
+                    <img class="google-icon" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+                        alt="Google logo" />
+                    Continuar com o Google
+                </a>
+            </div>
+
+            <div class="d-flex justify-content-center gap-md-2 mt-4">
                 <p class="text text-gray">Já possui uma conta ?</p>
                 <a class="btn-link text-decoration-none" routerLink="/auth/login">Acessar a conta</a>
             </div>
 
-            <div class="d-flex align-items-center justify-content-between border-top pt-3 mt-3">
-                <h6 class="m-0">Criar com</h6>
-
-                <!-- Social media buttons -->
-                <div class="ms-3 d-flex gap-3">
-                    <a href="#" class="btn btn-sm btn-icon btn-hover btn-danger text-inherit">
-                        <i class="bi bi-google fs-6"></i>
-                    </a>
-                    <a href="#" class="btn btn-sm btn-icon btn-hover btn-primary text-inherit">
-                        <i class="bi bi-facebook fs-6"></i>
-                    </a>
-                    <a href="#" class="btn btn-sm btn-icon btn-hover btn-primary text-inherit">
-                        <i class="bi bi-instagram fs-6"></i>
-                    </a>
-                    <a href="#" class="btn btn-sm btn-icon btn-hover btn-info text-inherit">
-                        <i class="bi bi-twitter-x fs-6"></i>
-                    </a>
-                </div>
-            </div>
         </main>
     </div>
 </div>

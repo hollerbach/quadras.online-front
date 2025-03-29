@@ -26,7 +26,7 @@ export class AppComponent implements OnInit {
         break;
       // Adicione outros casos conforme necessário
       default:
-        title = 'Mercado Digital';
+        title = 'localhost';
         break;
     }
     // Atualiza o título da página

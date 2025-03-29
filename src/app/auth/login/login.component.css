@@ -27,12 +27,62 @@
     cursor: pointer;
 }
 
-input.form-control {
-    padding-right: 2.5rem;
-    /* Garante espaço para o ícone */
-}
-
 .toggle-icon svg {
     width: 1.5rem;
     height: 1.5rem;
+}
+
+.divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 20px 0;
+}
+
+.divider::before,
+.divider::after {
+    content: "";
+    flex: 1;
+    border-bottom: 1px solid #ccc;
+}
+
+.divider:not(:empty)::before {
+    margin-right: 0.75em;
+}
+
+.divider:not(:empty)::after {
+    margin-left: 0.75em;
+}
+
+.divider span {
+    color: #666;
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+.google-btn {
+    display: flex;
+    width: 320px;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background-color: white;
+    border: 1px solid #dadce0;
+    border-radius: 6px;
+    color: #3c4043;
+    font-size: 16px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: box-shadow 0.2s;
+    font-family: Arial, sans-serif;
+    text-decoration: none;
+}
+
+.google-btn:hover {
+    box-shadow: 0 1px 3px rgba(60, 64, 67, 0.3), 0 4px 8px rgba(60, 64, 67, 0.15);
+}
+
+.google-icon {
+    width: 18px;
+    height: 18px;
 }
