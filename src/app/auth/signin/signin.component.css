@@ -15,3 +15,25 @@
     font-size: 0.9rem;
     margin: 0;
 }
+
+.position-relative {
+    position: relative;
+}
+
+.toggle-icon {
+    position: absolute;
+    top: 50%;
+    right: 1rem;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+input.form-control {
+    padding-right: 2.5rem;
+    /* Garante espaço para o ícone */
+}
+
+.toggle-icon svg {
+    width: 1.5rem;
+    height: 1.5rem;
+}

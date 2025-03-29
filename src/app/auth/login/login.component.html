@@ -9,10 +9,30 @@
           <input type="email" class="form-control" id="floatingInput" placeholder="nome@example.com.br">
           <label for="floatingInput">Endereço de e-mail</label>
         </div>
-        <div class="form-floating mb-3">
-          <input type="password" class="form-control" id="floatingPassword" placeholder="Senha">
-          <label for="floatingPassword">Senha</label>
+
+        <div class="mb-3">
+          <div class="form-floating position-relative">
+            <input class="form-control" id="floatingPassword" [type]="showPassword ? 'text' : 'password'"
+              placeholder="Senha">
+            <label for="floatingPassword">Senha</label>
+            <span class="toggle-icon" (click)="toggleShowPassword()">
+              <svg *ngIf="!showPassword" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+              </svg>
+              <svg *ngIf="showPassword" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M13.875 18.825A10.05 10.05 0 0112 19c-5.523 0-10-4.477-10-10 0-1.285.235-2.51.675-3.635M6.66 6.66A9.97 9.97 0 0112 5c5.523 0 10 4.477 10 10 0 2.387-.788 4.582-2.108 6.342M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3l18 18" />
+              </svg>
+            </span>
+          </div>
         </div>
+
         <div class="form-check text-start my-3">
           <input class="form-check-input" type="checkbox" value="remember-me" id="flexCheckDefault">
           <label class="form-check-label text-gray" for="flexCheckDefault">

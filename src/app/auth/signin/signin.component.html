@@ -2,13 +2,13 @@
     <div class="card card-signin p-4">
         <main class="form-signin">
             <h1 class="h2 mb-3 fw-bold text-center">Criar a Conta</h1>
-            <p class="mb-3 text-gray">Informe e-mail e senha para acessar a plataforma</p>
-            <form>
+            <p class="mb-3 text-gray text-center">Informe os dados abaixo para registro na plataforma</p>
+            <form class="needs-validation" novalidate>
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="firstName" placeholder="Nome">
-                            <label for="firstName">Nome</label>
+                            <input type="text" class="form-control" id="FirstName" placeholder="Nome" required>
+                            <label for="FirstName">Nome</label>
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -23,19 +23,30 @@
                     <label for="floatingInput">Endereço de e-mail</label>
                 </div>
 
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-floating mb-3">
-                            <input type="password" class="form-control" id="floatingPassword" placeholder="Senha">
-                            <label for="floatingPassword">Senha</label>
-                        </div>
+                <div class="mb-3">
+                    <div class="form-floating position-relative">
+                        <input class="form-control" id="floatingPassword" [type]="showPassword ? 'text' : 'password'"
+                            placeholder="Senha">
+                        <label for="floatingPassword">Senha</label>
+                        <span class="toggle-icon" (click)="toggleShowPassword()">
+                            <svg *ngIf="!showPassword" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            </svg>
+                            <svg *ngIf="showPassword" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M13.875 18.825A10.05 10.05 0 0112 19c-5.523 0-10-4.477-10-10 0-1.285.235-2.51.675-3.635M6.66 6.66A9.97 9.97 0 0112 5c5.523 0 10 4.477 10 10 0 2.387-.788 4.582-2.108 6.342M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3l18 18" />
+                            </svg>
+                        </span>
                     </div>
-                    <div class="col-md-6">
-                        <div class="form-floating mb-3">
-                            <input type="password" class="form-control" id="floatingPasswordCheck" placeholder="Confirme">
-                            <label for="floatingPasswordCheck">Confirme a Senha</label>
-                        </div>
-                    </div>
+                    <small id="passwordHelpBlock" class="form-text text-muted">
+                        A senha deve conter entre 8-20 letras, números e caracteres especiais
+                    </small>
                 </div>
 
                 <div class="form-check text-start my-3">
