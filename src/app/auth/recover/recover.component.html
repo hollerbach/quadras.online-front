@@ -2,9 +2,10 @@
   <div class="card card-login p-4">
     <main class="form-recover">
 
+      <h1 class="h2 mb-3 fw-bold text-center">Esqueceu sua senha ?</h1>
+      <p class="text-center text-gray">Informe o e-mail de cadastro e enviaremos instruções para recuperação</p>
+
       <form [formGroup]="forgotPasswordForm" (ngSubmit)="onSubmit()">
-        <h1 class="h2 mb-3 fw-bold text-center">Esqueceu sua senha ?</h1>
-        <p class="text-center text-gray">Informe o e-mail de cadastro e enviaremos instruções para recuperação</p>
         <div class="form-floating mb-3">
           <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com"
             formControlName="email">
@@ -17,7 +18,8 @@
             </div>
           </div>
         </div>
-        <button class="btn btn-primary w-100 py-2" type="submit"  [disabled]="forgotPasswordForm.invalid">
+
+        <button class="btn btn-primary w-100 py-2" type="submit" [disabled]="forgotPasswordForm.invalid">
           Enviar
         </button>
       </form>

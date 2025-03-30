@@ -1,61 +1,99 @@
 <div class="d-flex justify-content-center align-items-center" style="min-height: 100vh;">
-  <div class="card card-login  px-5 py-4">
+  <div class="card card-login px-5 py-4">
     <main class="form-signin">
       <h1 class="h2 mb-3 fw-bold text-center">Acessar sua Conta</h1>
-      <p class="text-center text-gray">Informe e-mail e senha para acessar a plataforma</p>
+      <p class="text-center text-gray">Informe os dados de acesso à plataforma</p>
 
-      <form>
-        <div class="form-floating mb-3">
-          <input type="email" class="form-control" id="floatingInput" placeholder="nome@example.com.br">
-          <label for="floatingInput">Endereço de e-mail</label>
-        </div>
+      <!-- CONTAINER COM TRANSIÇÃO ENTRE ETAPAS -->
+      <div class="position-relative" style="min-height: 260px;">
+        <!-- Etapa 1: E-mail -->
+        <form *ngIf="step() === 'email'" [formGroup]="forgotPasswordForm" (ngSubmit)="continueWithEmail()"
+          class="fade-in position-absolute w-100">
+          <div class="form-floating mb-3">
+            <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com"
+              formControlName="email" />
+            <label for="floatingInput">Endereço de e-mail</label>
 
-        <div class="mb-3">
-          <div class="form-floating position-relative">
-            <input class="form-control" id="floatingPassword" [type]="showPassword ? 'text' : 'password'"
-              placeholder="Senha">
+            <div class="text-danger error-message" style="min-height: 1.5em;">
+              <div *ngIf="emailControl.invalid && (emailControl.touched || emailControl.dirty)">
+                <div *ngIf="emailControl.errors?.['required']">O e-mail é obrigatório.</div>
+                <div *ngIf="emailControl.errors?.['email']">Formato de e-mail inválido.</div>
+              </div>
+            </div>
+          </div>
+
+          <button class="btn btn-primary w-100 py-2 mb-2" type="submit" [disabled]="forgotPasswordForm.invalid">
+            Continuar
+          </button>
+
+          <!-- BOTÕES SOCIAIS (ETAPA 1) -->
+          <div class="divider mt-3"><span>ou</span></div>
+          <div class="d-flex align-items-center mt-3">
+            <a href="#" class="google-btn w-100 d-flex align-items-center justify-content-center gap-2"
+              (click)="loginWith('google')">
+              <img class="google-icon" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+                alt="Google logo" />
+              Entrar com o Google
+            </a>
+          </div>
+        </form>
+
+        <!-- Etapa 2: Senha -->
+        <form *ngIf="step() === 'password'" [formGroup]="loginForm" (ngSubmit)="loginWithPassword()"
+          class="fade-in position-absolute w-100">
+          <!-- Input de E-mail Bloqueado com botão "Editar" -->
+          <div class="form-floating position-relative mb-3">
+            <input class="form-control" id="floatingEmailReadonly" [value]="storedEmail()" readonly />
+            <label for="floatingEmailReadonly">Endereço de e-mail</label>
+            <span class="toggle-icon position-absolute end-0 top-50 translate-middle-y me-3 text-primary"
+              style="cursor: pointer;" (click)="backToEmail()">
+              Editar
+            </span>
+          </div>
+
+          <!-- Campo de Senha com botão mostrar/ocultar -->
+          <div class="form-floating position-relative mb-3">
+            <input class="form-control" id="floatingPassword" formControlName="password"
+              [type]="showPassword ? 'text' : 'password'" placeholder="Senha" />
             <label for="floatingPassword">Senha</label>
-            <span class="toggle-icon" (click)="toggleShowPassword()">
+            <span class="toggle-icon position-absolute end-0 top-50 translate-middle-y me-3" style="cursor: pointer;"
+              (click)="toggleShowPassword()">
               <svg *ngIf="!showPassword" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                stroke="currentColor">
+                stroke="currentColor" width="20">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
               </svg>
               <svg *ngIf="showPassword" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                stroke="currentColor">
+                stroke="currentColor" width="20">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="M13.875 18.825A10.05 10.05 0 0112 19c-5.523 0-10-4.477-10-10 0-1.285.235-2.51.675-3.635M6.66 6.66A9.97 9.97 0 0112 5c5.523 0 10 4.477 10 10 0 2.387-.788 4.582-2.108 6.342M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3l18 18" />
               </svg>
             </span>
           </div>
-        </div>
 
-        <div class="d-flex justify-content-between align-items-center gap-md-5 my-3">
-          <a class="btn-link text-decoration-none" routerLink="/auth/recover">Esqueceu sua senha?</a>
-        </div>
-        <button class="btn btn-primary w-100 py-2" type="submit">Entrar</button>
-      </form>
+          <div class="d-flex justify-content-between align-items-center my-3">
+            <a class="btn-link text-decoration-none" routerLink="/auth/recover">Esqueceu sua senha?</a>
+          </div>
 
-      <div class="divider"><span>ou</span></div>
-
-      <div class="d-flex align-items-center">
-        <a href="#" class="google-btn">
-          <img class="google-icon" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
-            alt="Google logo" />
-          Entrar com o Google
-        </a>
+          <button class="btn btn-primary w-100 py-2" type="submit" [disabled]="submitting()">
+            Entrar
+          </button>
+        </form>
       </div>
 
+      <!-- MENSAGEM DE ERRO -->
+      <div *ngIf="error()" class="text-danger mt-2 text-center">
+        {{ error() }}
+      </div>
+
+      <!-- REGISTRO -->
       <div class="d-flex justify-content-center gap-md-2 mt-4">
-        <label class="form-check-label text-gray" for="flexCheckDefault">
-          Não tem uma conta?
-        </label>
+        <label class="form-check-label text-gray">Não tem uma conta?</label>
         <a class="btn-link text-decoration-none" routerLink="/auth/signin">Registrar uma Conta</a>
       </div>
-
     </main>
   </div>
 </div>
