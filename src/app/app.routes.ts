@@ -3,12 +3,48 @@ import { LoginComponent } from './auth/login/login.component';
 import { RecoverComponent } from './auth/recover/recover.component';
 import { SigninComponent } from './auth/signin/signin.component';
 import { HomeComponent } from './home/home.component';
+import { authGuard, noAuthGuard } from './services/auth.guard';
 
 export const routes: Routes = [
-  { path: 'auth/login', component: LoginComponent },
-  { path: 'auth/recover', component: RecoverComponent },
-  { path: 'auth/signin', component: SigninComponent },
-  { path: 'home', component: HomeComponent },
-  { path: '', redirectTo: 'home', pathMatch: 'full' }, // Redireciona para login por padrão
-  { path: '**', redirectTo: 'home' }                   // Redireciona para login caso a rota não exista
+  // Rotas de autenticação - acessíveis apenas para usuários não logados
+  {
+    path: 'auth/login',
+    component: LoginComponent,
+    canActivate: [noAuthGuard]
+  },
+  {
+    path: 'auth/recover',
+    component: RecoverComponent,
+    canActivate: [noAuthGuard]
+  },
+  {
+    path: 'auth/signin',
+    component: SigninComponent,
+    canActivate: [noAuthGuard]
+  },
+
+  // Rotas protegidas - requerem autenticação
+  // Exemplo para futuras rotas protegidas:
+  // {
+  //   path: 'dashboard',
+  //   loadComponent: () => import('./dashboard/dashboard.component').then(c => c.DashboardComponent),
+  //   canActivate: [authGuard]
+  // },
+
+  // Rotas públicas
+  {
+    path: 'home',
+    component: HomeComponent
+  },
+
+  // Redirecionamentos
+  {
+    path: '',
+    redirectTo: 'home',
+    pathMatch: 'full'
+  },
+  {
+    path: '**',
+    redirectTo: 'home'
+  }
 ];

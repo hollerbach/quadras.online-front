@@ -1,15 +1,16 @@
-// src/app/shared/validators/email.validator.ts
-import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { AbstractControl, ValidationErrors } from '@angular/forms';
 
-export function emailValidator(): ValidatorFn {
-  return (control: AbstractControl): ValidationErrors | null => {
+export class EmailValidator {
+  static isValid(control: AbstractControl): ValidationErrors | null {
     if (!control.value) {
-      // Se o campo estiver vazio, não valida, pois a verificação de "required" pode ser feita separadamente.
+      // Se o campo estiver vazio, não valida (a validação 'required' cuidará disso)
       return null;
     }
-    // Expressão regular para validação básica de e-mail.
+    
+    // Expressão regular para validação de e-mail
     const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
     const valid = emailRegex.test(control.value);
+    
     return valid ? null : { emailInvalid: true };
-  };
+  }
 }

@@ -1,12 +1,14 @@
 import { Component, signal, OnInit } from '@angular/core';
-import { RouterLink } from '@angular/router';
-import { FormBuilder, FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
+import { RouterLink, Router, ActivatedRoute } from '@angular/router';
+import { FormBuilder, FormGroup, FormControl, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { AuthService, LoginRequest } from '../../services/auth.service';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [RouterLink, CommonModule, ReactiveFormsModule],
+  imports: [RouterLink, CommonModule, ReactiveFormsModule, FormsModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
 })
@@ -20,16 +22,20 @@ export class LoginComponent implements OnInit {
   forgotPasswordForm!: FormGroup;
   storedEmail = signal<string>('');
 
-  constructor(private fb: FormBuilder) {}
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit(): void {
     this.forgotPasswordForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]]
     });
 
-    this.loginForm = new FormGroup({
-      email: new FormControl(''),
-      password: new FormControl('', [Validators.required, Validators.minLength(6)]),
+    this.loginForm = this.fb.group({
+      password: ['', [Validators.required, Validators.minLength(6)]]
     });
   }
 
@@ -55,34 +61,34 @@ export class LoginComponent implements OnInit {
     this.submitting.set(true);
     this.error.set(null);
 
-    try {
-      const credentials = {
-        email: this.storedEmail(),
-        password: this.loginForm.value.password
-      };
-      // Simulação de login
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      console.log('Login realizado com:', credentials);
-    } catch (e) {
-      this.error.set('Erro ao fazer login. Verifique sua senha.');
-    } finally {
-      this.submitting.set(false);
-    }
+    const loginData: LoginRequest = {
+      email: this.storedEmail(),
+      password: this.loginForm.value.password
+    };
+
+    this.authService.login(loginData)
+      .pipe(finalize(() => this.submitting.set(false)))
+      .subscribe({
+        next: () => {
+          // Redireciona para URL de retorno ou para home
+          const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/home';
+          this.router.navigate([returnUrl]);
+        },
+        error: (error) => {
+          this.error.set(typeof error === 'string' 
+            ? error 
+            : 'Erro ao fazer login. Verifique suas credenciais.');
+        }
+      });
   }
 
   loginWith(provider: 'google' | 'microsoft') {
     console.log(`Redirecionando para login com ${provider}`);
-    // Aqui iria lógica real de redirecionamento OAuth
+    // Implementação futura para autenticação com provedores externos
   }
 
   backToEmail() {
     this.step.set('email');
     this.loginForm.reset();
-  }
-
-  onSubmitForgotPassword() {
-    if (this.forgotPasswordForm.valid) {
-      console.log('Dados do formulário:', this.forgotPasswordForm.value);
-    }
   }
 }

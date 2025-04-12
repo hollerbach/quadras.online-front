@@ -5,6 +5,7 @@ import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-header',
+  standalone: true,
   imports: [RouterLink, CommonModule],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'

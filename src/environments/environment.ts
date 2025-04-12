@@ -1,7 +1,5 @@
-// src/environments/environment.ts
 export const environment = {
-    production: false,
-    // Você pode incluir outras variáveis de ambiente, se necessário.
-    googleTagId: 'SEU_ID_DEV'
-  };
-  
+  production: false,
+  apiUrl: 'http://localhost:3000/', // URL base da API
+  googleTagId: ''
+};

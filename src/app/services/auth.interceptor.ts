@@ -10,6 +10,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   
   const token = authService.getToken();
   
+  // Adiciona o token de autenticação se disponível
   if (token) {
     req = req.clone({
       setHeaders: {
@@ -20,9 +21,10 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   
   return next(req).pipe(
     catchError(error => {
+      // Se recebemos um erro 401 (Não Autorizado), deslogamos o usuário
       if (error.status === 401) {
         authService.logout();
-        router.navigate(['/login']);
+        router.navigate(['/auth/login']);
       }
       return throwError(() => error);
     })

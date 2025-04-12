@@ -1,7 +1,5 @@
-// src/environments/environment.prod.ts
 export const environment = {
-    production: true,
-    // Configure o ID de produção ou outras variáveis específicas para produção.
-    googleTagId: 'GTM-TD3PBZRX'
-  };
-  
+  production: true,
+  apiUrl: 'https://api.mercearia.digital/', // URL da API de produção
+  googleTagId: 'GTM-TD3PBZRX'
+};

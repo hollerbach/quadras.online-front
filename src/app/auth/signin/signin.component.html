@@ -3,30 +3,60 @@
         <main class="form-signin">
             <h1 class="h2 mb-3 fw-bold text-center">Registrar uma Conta</h1>
             <p class="mb-3 text-gray text-center">Informe os dados abaixo para registro na plataforma</p>
-            <form class="needs-validation" novalidate>
+            
+            <!-- Mensagem de erro global -->
+            <div *ngIf="errorMessage()" class="alert alert-danger mb-3">
+                {{ errorMessage() }}
+            </div>
+
+            <form [formGroup]="signupForm" (ngSubmit)="onSubmit()" class="needs-validation">
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="FirstName" placeholder="Nome" required>
-                            <label for="FirstName">Nome</label>
+                            <input type="text" class="form-control" 
+                                   [ngClass]="{'is-invalid': hasError('name', 'required') || hasError('name', 'minlength')}"
+                                   id="firstName" placeholder="Nome" formControlName="name" required>
+                            <label for="firstName">Nome</label>
+                            <div class="invalid-feedback" *ngIf="hasError('name', 'required')">
+                                Nome é obrigatório
+                            </div>
+                            <div class="invalid-feedback" *ngIf="hasError('name', 'minlength')">
+                                Nome deve ter pelo menos 3 caracteres
+                            </div>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="lastName" placeholder="Sobrenome">
+                            <input type="text" class="form-control"
+                                   [ngClass]="{'is-invalid': hasError('lastName', 'required')}"
+                                   id="lastName" placeholder="Sobrenome" formControlName="lastName">
                             <label for="lastName">Sobrenome</label>
+                            <div class="invalid-feedback" *ngIf="hasError('lastName', 'required')">
+                                Sobrenome é obrigatório
+                            </div>
                         </div>
                     </div>
                 </div>
+                
                 <div class="form-floating mb-3">
-                    <input type="email" class="form-control" id="floatingInput" placeholder="nome@example.com.br">
+                    <input type="email" class="form-control"
+                           [ngClass]="{'is-invalid': hasError('email', 'required') || hasError('email', 'emailInvalid')}"
+                           id="floatingInput" placeholder="nome@example.com.br" formControlName="email">
                     <label for="floatingInput">Endereço de e-mail</label>
+                    <div class="invalid-feedback" *ngIf="hasError('email', 'required')">
+                        E-mail é obrigatório
+                    </div>
+                    <div class="invalid-feedback" *ngIf="hasError('email', 'emailInvalid')">
+                        Formato de e-mail inválido
+                    </div>
                 </div>
 
-                <div class="mb-4">
+                <div class="mb-3">
                     <div class="form-floating position-relative">
-                        <input class="form-control" id="floatingPassword" [type]="showPassword ? 'text' : 'password'"
-                            placeholder="Senha">
+                        <input class="form-control" id="floatingPassword" 
+                               [ngClass]="{'is-invalid': hasError('password', 'required') || hasError('password', 'minlength')}"
+                               [type]="showPassword ? 'text' : 'password'"
+                               placeholder="Senha" formControlName="password">
                         <label for="floatingPassword">Senha</label>
                         <span class="toggle-icon" (click)="toggleShowPassword()">
                             <svg *ngIf="!showPassword" xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -43,19 +73,31 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3l18 18" />
                             </svg>
                         </span>
+                        <div class="invalid-feedback" *ngIf="hasError('password', 'required')">
+                            Senha é obrigatória
+                        </div>
+                        <div class="invalid-feedback" *ngIf="hasError('password', 'minlength')">
+                            Senha deve ter no mínimo 8 caracteres
+                        </div>
                     </div>
                     <small id="passwordHelpBlock" class="form-text text-muted">
                         A senha deve conter entre 8-20 letras, números e caracteres especiais
                     </small>
                 </div>
 
-                <button class="btn btn-primary w-100 py-2" type="submit">Registrar</button>
+                <button class="btn btn-primary w-100 py-2" type="submit" [disabled]="isLoading()">
+                    <span *ngIf="!isLoading()">Registrar</span>
+                    <span *ngIf="isLoading()">
+                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                        Processando...
+                    </span>
+                </button>
             </form>
 
             <div class="divider"><span>ou</span></div>
 
-            <div class="d-flex align-items-center">
-                <a href="#" class="google-btn">
+            <div class="d-flex align-items-center justify-content-center">
+                <a href="javascript:void(0)" class="google-btn" (click)="loginWith('google')">
                     <img class="google-icon" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
                         alt="Google logo" />
                     Registrar com o Google
@@ -63,7 +105,7 @@
             </div>
 
             <div class="d-flex justify-content-center gap-md-2 mt-4">
-                <p class="text text-gray">Já possui uma conta ?</p>
+                <p class="text-gray">Já possui uma conta?</p>
                 <a class="btn-link text-decoration-none" routerLink="/auth/login">Acessar sua conta</a>
             </div>
 
