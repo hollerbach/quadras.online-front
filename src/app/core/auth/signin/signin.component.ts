@@ -2,7 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router, ActivatedRoute, RouterLink } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, FormsModule } from '@angular/forms';
-import { EmailValidator } from '../../shared/validators/email.validator';
+import { EmailValidator } from '../../../shared/validators/email.validator';
 import { AuthService, RegisterRequest } from '../../services/auth.service';
 import { finalize } from 'rxjs';
 import { ToastrService } from 'ngx-toastr'; // Importar ToastrService
