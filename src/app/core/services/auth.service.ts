@@ -1,5 +1,5 @@
 import { Injectable, inject, signal } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable, catchError, tap, throwError } from 'rxjs';
 import { environment } from '../../../environments/environment';
@@ -52,10 +52,19 @@ export class AuthService {
   }
   
   login(data: LoginRequest): Observable<AuthResponse> {
+    console.log('Login request:', data);
+    console.log('API URL:', `${this.apiUrl}/auth/login`);
+    
     return this.http.post<AuthResponse>(`${this.apiUrl}/auth/login`, data)
       .pipe(
-        tap(response => this.handleAuthSuccess(response)),
-        catchError(error => this.handleError(error))
+        tap(response => {
+          console.log('Login successful:', response);
+          this.handleAuthSuccess(response);
+        }),
+        catchError(error => {
+          console.error('Login error:', error);
+          return this.handleError(error);
+        })
       );
   }
   
@@ -63,7 +72,7 @@ export class AuthService {
     localStorage.removeItem(this.tokenKey);
     this.isAuthenticated.set(false);
     this.currentUser.set(null);
-    this.router.navigate(['/login']);
+    this.router.navigate(['/auth/login']);
   }
   
   getToken(): string | null {
@@ -84,19 +93,26 @@ export class AuthService {
     const token = this.getToken();
     if (token) {
       try {
+        // Opcionalmente, decodificar o token JWT para obter informações do usuário
+        // ou fazer uma chamada para /auth/me
         this.isAuthenticated.set(true);
+        this.getUserInfo().subscribe();
       } catch (e) {
+        console.error('Error loading user from token:', e);
         this.logout();
       }
     }
   }
   
-  private getUserInfo(): Observable<any> {
+  getUserInfo(): Observable<any> {
     return this.http.get(`${this.apiUrl}/auth/me`)
       .pipe(
         tap(user => this.currentUser.set(user)),
         catchError(error => {
-          this.logout();
+          console.error('Error getting user info:', error);
+          if (error.status === 401) {
+            this.logout();
+          }
           return throwError(() => error);
         })
       );
@@ -106,12 +122,29 @@ export class AuthService {
     let errorMessage = 'Ocorreu um erro desconhecido';
     
     if (error.error instanceof ErrorEvent) {
+      // Erro do lado do cliente
       errorMessage = `Erro: ${error.error.message}`;
-    } else {
-      errorMessage = `Código: ${error.status}, Mensagem: ${error.error?.message || error.message}`;
+    } else if (error instanceof HttpErrorResponse) {
+      // Erro do lado do servidor
+      switch (error.status) {
+        case 401:
+          errorMessage = 'Credenciais inválidas. Verifique seu e-mail e senha.';
+          break;
+        case 403:
+          errorMessage = 'Acesso negado.';
+          break;
+        case 404:
+          errorMessage = 'Serviço não encontrado.';
+          break;
+        case 500:
+          errorMessage = 'Erro interno do servidor. Tente novamente mais tarde.';
+          break;
+        default:
+          errorMessage = error.error?.message || 'Ocorreu um erro na comunicação com o servidor.';
+      }
     }
     
-    console.error(errorMessage);
+    console.error('Auth error:', errorMessage);
     return throwError(() => errorMessage);
   }
 }
