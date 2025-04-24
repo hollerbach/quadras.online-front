@@ -1,4 +1,4 @@
-// src/app/services/auth.interceptor.ts
+// src/app/core/services/auth.interceptor.ts
 import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { catchError, throwError } from 'rxjs';
@@ -40,28 +40,32 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
       
       // Tratamento específico para erro 401 (Não Autorizado)
       if (error.status === 401) {
-        // Mostrar mensagem de erro com toastr
-        toastr.warning(
-          'Sua sessão expirou ou as credenciais são inválidas. Por favor, faça login novamente.', 
-          'Autenticação Necessária', 
-          { 
-            timeOut: 5000,
-            progressBar: true,
-            closeButton: true,
-            positionClass: 'toast-top-center'
-          }
-        );
-        
-        // Limpar dados de autenticação
-        authService.logout();
-        
-        // Redirecionar para a página de login com parâmetro para indicar sessão expirada
-        router.navigate(['/auth/login'], { 
-          queryParams: { 
-            returnUrl: router.url,
-            sessionExpired: true 
-          } 
-        });
+        // Se for uma requisição para /auth/login, não exibimos a notificação
+        // pois provavelmente é uma tentativa de login com credenciais inválidas
+        if (!req.url.includes('/auth/login')) {
+          // Mostrar mensagem de erro com toastr
+          toastr.warning(
+            'Sua sessão expirou ou as credenciais são inválidas. Por favor, faça login novamente.', 
+            'Autenticação Necessária', 
+            { 
+              timeOut: 5000,
+              progressBar: true,
+              closeButton: true,
+              positionClass: 'toast-top-center'
+            }
+          );
+          
+          // Limpar dados de autenticação
+          authService.logout();
+          
+          // Redirecionar para a página de login com parâmetro para indicar sessão expirada
+          router.navigate(['/auth/login'], { 
+            queryParams: { 
+              returnUrl: router.url,
+              sessionExpired: true 
+            } 
+          });
+        }
       }
       
       // Tratamento para erro 403 (Proibido/Sem permissão)

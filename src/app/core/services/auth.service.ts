@@ -3,6 +3,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable, catchError, tap, throwError } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { ToastrService } from 'ngx-toastr';
 
 export interface RegisterRequest {
   email: string;
@@ -31,6 +32,7 @@ export interface AuthResponse {
 export class AuthService {
   private http = inject(HttpClient);
   private router = inject(Router);
+  private toastr = inject(ToastrService);
   
   private apiUrl = environment.apiUrl;
   private tokenKey = 'auth_token';
@@ -38,7 +40,7 @@ export class AuthService {
   // Signals para estado de autenticação
   private _isAuthenticated = signal<boolean>(this.hasToken());
   currentUser = signal<any>(null);
-
+  
   // Método para verificar autenticação
   isAuthenticated(): boolean {
     return this._isAuthenticated();
@@ -51,7 +53,18 @@ export class AuthService {
   register(data: RegisterRequest): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.apiUrl}/auth/register`, data)
       .pipe(
-        tap(response => this.handleAuthSuccess(response)),
+        tap(response => {
+          this.handleAuthSuccess(response);
+          this.toastr.success(
+            'Sua conta foi criada com sucesso!', 
+            'Registro Concluído',
+            {
+              timeOut: 5000,
+              progressBar: true,
+              closeButton: true
+            }
+          );
+        }),
         catchError(error => this.handleError(error))
       );
   }
@@ -65,6 +78,14 @@ export class AuthService {
         tap(response => {
           console.log('Login successful:', response);
           this.handleAuthSuccess(response);
+          this.toastr.success(
+            'Login efetuado com sucesso!', 
+            'Bem-vindo',
+            {
+              timeOut: 3000,
+              progressBar: true
+            }
+          );
         }),
         catchError(error => {
           console.error('Login error:', error);
@@ -98,24 +119,37 @@ export class AuthService {
     const token = this.getToken();
     if (token) {
       try {
-        // Opcionalmente, decodificar o token JWT para obter informações do usuário
-        // ou fazer uma chamada para /auth/me
+        // Definimos o usuário como autenticado baseado na presença do token
         this._isAuthenticated.set(true);
-        this.getUserInfo().subscribe();
+        
+        // Fazemos uma chamada para /users/me para obter os dados atuais do usuário
+        this.getUserInfo().subscribe({
+          next: (userData) => {
+            console.log('User data loaded from token:', userData);
+          },
+          error: (error) => {
+            console.error('Failed to load user data from token:', error);
+            // Se o token for inválido, o método getUserInfo já fará logout
+          }
+        });
       } catch (e) {
         console.error('Error loading user from token:', e);
         this.logout();
       }
     }
   }
-
+  
   getUserInfo(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/auth/me`)
+    return this.http.get(`${this.apiUrl}/users/me`)
       .pipe(
-        tap(user => this.currentUser.set(user)),
+        tap(user => {
+          console.log('User info retrieved:', user);
+          this.currentUser.set(user);
+        }),
         catchError(error => {
           console.error('Error getting user info:', error);
           if (error.status === 401) {
+            // Token inválido ou expirado, fazer logout
             this.logout();
           }
           return throwError(() => error);
@@ -140,6 +174,13 @@ export class AuthService {
           break;
         case 404:
           errorMessage = 'Serviço não encontrado.';
+          break;
+        case 422:
+          if (error.error?.message) {
+            errorMessage = error.error.message;
+          } else {
+            errorMessage = 'Erro de validação no formulário.';
+          }
           break;
         case 500:
           errorMessage = 'Erro interno do servidor. Tente novamente mais tarde.';
