@@ -1,7 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, inject } from '@angular/core';
 import { RouterLink, Router, NavigationEnd } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Title } from '@angular/platform-browser';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -14,6 +15,7 @@ export class HeaderComponent implements OnInit {
   @Input() showMenus: boolean = true;
 
   public appTitle: string = '';
+  private authService = inject(AuthService);
 
   constructor(
     private titleService: Title,
@@ -31,5 +33,18 @@ export class HeaderComponent implements OnInit {
         // this.showMenus = event.url === '/home';
       }
     });
+  }
+
+  get isAuthenticated() {
+    return this.authService.isAuthenticated();
+  }
+
+  get userName() {
+    const user = this.authService.currentUser();
+    return user?.email || 'Usuário';
+  }
+
+  logout() {
+    this.authService.logout();
   }
 }

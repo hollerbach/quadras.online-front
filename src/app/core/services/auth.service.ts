@@ -36,8 +36,13 @@ export class AuthService {
   private tokenKey = 'auth_token';
   
   // Signals para estado de autenticação
-  isAuthenticated = signal<boolean>(this.hasToken());
+  private _isAuthenticated = signal<boolean>(this.hasToken());
   currentUser = signal<any>(null);
+
+  // Método para verificar autenticação
+  isAuthenticated(): boolean {
+    return this._isAuthenticated();
+  }
   
   constructor() {
     this.loadUserFromToken();
@@ -70,7 +75,7 @@ export class AuthService {
   
   logout(): void {
     localStorage.removeItem(this.tokenKey);
-    this.isAuthenticated.set(false);
+    this._isAuthenticated.set(false);
     this.currentUser.set(null);
     this.router.navigate(['/auth/login']);
   }
@@ -85,7 +90,7 @@ export class AuthService {
   
   private handleAuthSuccess(response: AuthResponse): void {
     localStorage.setItem(this.tokenKey, response.token);
-    this.isAuthenticated.set(true);
+    this._isAuthenticated.set(true);
     this.currentUser.set(response.user);
   }
   
@@ -95,7 +100,7 @@ export class AuthService {
       try {
         // Opcionalmente, decodificar o token JWT para obter informações do usuário
         // ou fazer uma chamada para /auth/me
-        this.isAuthenticated.set(true);
+        this._isAuthenticated.set(true);
         this.getUserInfo().subscribe();
       } catch (e) {
         console.error('Error loading user from token:', e);
@@ -103,7 +108,7 @@ export class AuthService {
       }
     }
   }
-  
+
   getUserInfo(): Observable<any> {
     return this.http.get(`${this.apiUrl}/auth/me`)
       .pipe(
