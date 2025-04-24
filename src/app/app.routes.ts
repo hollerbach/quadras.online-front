@@ -1,9 +1,9 @@
 import { Routes } from '@angular/router';
-import { LoginComponent } from './auth/login/login.component';
-import { RecoverComponent } from './auth/recover/recover.component';
-import { SigninComponent } from './auth/signin/signin.component';
+import { LoginComponent } from './core/auth/login/login.component';
+import { RecoverComponent } from './core/auth/recover/recover.component';
+import { SigninComponent } from './core/auth/signin/signin.component';
 import { HomeComponent } from './home/home.component';
-import { authGuard, noAuthGuard } from './services/auth.guard';
+import { authGuard, noAuthGuard } from './core/services/auth.guard';
 
 export const routes: Routes = [
   // Rotas de autenticação - acessíveis apenas para usuários não logados
