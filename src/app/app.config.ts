@@ -1,8 +1,11 @@
+// src/app/app.config.ts
+// Make sure CORS is properly configured
+
 import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
-import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
+import { provideHttpClient, withFetch, withInterceptors, withXsrfConfiguration } from '@angular/common/http';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideToastr } from 'ngx-toastr';
 import { authInterceptor } from './core/services/auth.interceptor';
@@ -19,6 +22,10 @@ export const appConfig: ApplicationConfig = {
     }),
     provideHttpClient(
       withFetch(),
+      withXsrfConfiguration({ // Add XSRF protection
+        cookieName: 'XSRF-TOKEN',
+        headerName: 'X-XSRF-TOKEN'
+      }),
       withInterceptors([authInterceptor])
     )
   ]

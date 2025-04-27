@@ -1,3 +1,5 @@
+// src/app/core/services/auth.service.ts
+
 import { Injectable, inject, signal } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
@@ -18,7 +20,6 @@ export interface LoginRequest {
 }
 
 export interface AuthResponse {
-  token: string;
   user: {
     id: string;
     email: string;
@@ -34,12 +35,16 @@ export class AuthService {
   private router = inject(Router);
   private toastr = inject(ToastrService);
   
-  private apiUrl = environment.apiUrl;
-  private tokenKey = 'auth_token';
+  private _apiUrl = environment.apiUrl;
   
   // Signals para estado de autenticação
-  private _isAuthenticated = signal<boolean>(this.hasToken());
+  private _isAuthenticated = signal<boolean>(false);
   currentUser = signal<any>(null);
+  
+  // Public method to get the API URL
+  getApiUrl(): string {
+    return this._apiUrl;
+  }
   
   // Método para verificar autenticação
   isAuthenticated(): boolean {
@@ -47,114 +52,115 @@ export class AuthService {
   }
   
   constructor() {
-    this.loadUserFromToken();
+    this.checkAuthStatus();
   }
   
   register(data: RegisterRequest): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.apiUrl}/auth/register`, data)
-      .pipe(
-        tap(response => {
-          this.handleAuthSuccess(response);
-          this.toastr.success(
-            'Sua conta foi criada com sucesso!', 
-            'Registro Concluído',
-            {
-              timeOut: 5000,
-              progressBar: true,
-              closeButton: true
-            }
-          );
-        }),
-        catchError(error => this.handleError(error))
-      );
+    return this.http.post<AuthResponse>(`${this._apiUrl}/auth/register`, data, {
+      withCredentials: true // Important for cookies to be sent/received
+    }).pipe(
+      tap(response => {
+        this.handleAuthSuccess(response);
+        this.toastr.success(
+          'Sua conta foi criada com sucesso!', 
+          'Registro Concluído',
+          {
+            timeOut: 5000,
+            progressBar: true,
+            closeButton: true
+          }
+        );
+      }),
+      catchError(error => this.handleError(error))
+    );
   }
   
   login(data: LoginRequest): Observable<AuthResponse> {
     console.log('Login request:', data);
-    console.log('API URL:', `${this.apiUrl}/auth/login`);
+    console.log('API URL:', `${this._apiUrl}/auth/login`);
     
-    return this.http.post<AuthResponse>(`${this.apiUrl}/auth/login`, data)
-      .pipe(
-        tap(response => {
-          console.log('Login successful:', response);
-          this.handleAuthSuccess(response);
-          this.toastr.success(
-            'Login efetuado com sucesso!', 
-            'Bem-vindo',
-            {
-              timeOut: 3000,
-              progressBar: true
-            }
-          );
-        }),
-        catchError(error => {
-          console.error('Login error:', error);
-          return this.handleError(error);
-        })
-      );
+    return this.http.post<AuthResponse>(`${this._apiUrl}/auth/login`, data, {
+      withCredentials: true // Important for cookies to be sent/received
+    }).pipe(
+      tap(response => {
+        console.log('Login successful:', response);
+        this.handleAuthSuccess(response);
+        this.toastr.success(
+          'Login efetuado com sucesso!', 
+          'Bem-vindo',
+          {
+            timeOut: 3000,
+            progressBar: true
+          }
+        );
+      }),
+      catchError(error => {
+        console.error('Login error:', error);
+        return this.handleError(error);
+      })
+    );
   }
   
   logout(): void {
-    localStorage.removeItem(this.tokenKey);
-    this._isAuthenticated.set(false);
-    this.currentUser.set(null);
-    this.router.navigate(['/auth/login']);
+    // Call logout endpoint to clear the cookie on the server
+    this.http.post(`${this._apiUrl}/auth/logout`, {}, {
+      withCredentials: true
+    }).subscribe({
+      next: () => {
+        this._isAuthenticated.set(false);
+        this.currentUser.set(null);
+        this.router.navigate(['/auth/login']);
+      },
+      error: () => {
+        // Even if the server call fails, clear the local state
+        this._isAuthenticated.set(false);
+        this.currentUser.set(null);
+        this.router.navigate(['/auth/login']);
+      }
+    });
   }
   
-  getToken(): string | null {
-    return localStorage.getItem(this.tokenKey);
-  }
-  
-  private hasToken(): boolean {
-    return !!this.getToken();
+  // Check if the user is authenticated by validating the cookie with the server
+  checkAuthStatus(): void {
+    this.http.get(`${this._apiUrl}/auth/status`, {
+      withCredentials: true
+    }).subscribe({
+      next: () => {
+        this._isAuthenticated.set(true);
+        // Get user data
+        this.getUserInfo().subscribe();
+      },
+      error: () => {
+        this._isAuthenticated.set(false);
+        this.currentUser.set(null);
+      }
+    });
   }
   
   private handleAuthSuccess(response: AuthResponse): void {
-    localStorage.setItem(this.tokenKey, response.token);
     this._isAuthenticated.set(true);
     this.currentUser.set(response.user);
   }
   
-  private loadUserFromToken(): void {
-    const token = this.getToken();
-    if (token) {
-      try {
-        // Definimos o usuário como autenticado baseado na presença do token
-        this._isAuthenticated.set(true);
-        
-        // Fazemos uma chamada para /users/me para obter os dados atuais do usuário
-        this.getUserInfo().subscribe({
-          next: (userData) => {
-            console.log('User data loaded from token:', userData);
-          },
-          error: (error) => {
-            console.error('Failed to load user data from token:', error);
-            // Se o token for inválido, o método getUserInfo já fará logout
-          }
-        });
-      } catch (e) {
-        console.error('Error loading user from token:', e);
-        this.logout();
-      }
-    }
-  }
-  
   getUserInfo(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/users/me`)
-      .pipe(
-        tap(user => {
-          console.log('User info retrieved:', user);
-          this.currentUser.set(user);
-        }),
-        catchError(error => {
-          console.error('Error getting user info:', error);
-          if (error.status === 401) {
-            // Token inválido ou expirado, fazer logout
-            this.logout();
-          }
-          return throwError(() => error);
-        })
-      );
+    return this.http.get(`${this._apiUrl}/users/me`, {
+      withCredentials: true
+    }).pipe(
+      tap(user => {
+        console.log('User info retrieved:', user);
+        this.currentUser.set(user);
+      }),
+      catchError(error => {
+        console.error('Error getting user info:', error);
+        if (error.status === 401) {
+          // Token inválido ou expirado, fazer logout
+          this._isAuthenticated.set(false);
+          this.currentUser.set(null);
+          this.router.navigate(['/auth/login']);
+        }
+        return throwError(() => error);
+      })
+    );
   }
   
   private handleError(error: any): Observable<never> {

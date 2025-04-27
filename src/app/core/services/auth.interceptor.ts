@@ -1,4 +1,5 @@
 // src/app/core/services/auth.interceptor.ts
+
 import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { catchError, throwError } from 'rxjs';
@@ -11,14 +12,13 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const router = inject(Router);
   const toastr = inject(ToastrService);
   
-  const token = authService.getToken();
+  // Get API URL using the public method from AuthService
+  const apiUrl = authService.getApiUrl();
   
-  // Adiciona o token de autenticação se disponível
-  if (token) {
+  // Make sure withCredentials is set for all requests to the API
+  if (req.url.includes(apiUrl)) {
     req = req.clone({
-      setHeaders: {
-        Authorization: `Bearer ${token}`
-      }
+      withCredentials: true
     });
   }
   
@@ -54,9 +54,6 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
               positionClass: 'toast-top-center'
             }
           );
-          
-          // Limpar dados de autenticação
-          authService.logout();
           
           // Redirecionar para a página de login com parâmetro para indicar sessão expirada
           router.navigate(['/auth/login'], { 

@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 
 @Component({
   selector: 'app-recover',
+  standalone: true,
   imports: [RouterLink, CommonModule, ReactiveFormsModule],
   templateUrl: './recover.component.html',
   styleUrl: './recover.component.css',

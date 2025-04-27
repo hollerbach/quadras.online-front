@@ -167,17 +167,17 @@
                 <!-- Botões para usuários não autenticados -->
                 <ng-container *ngIf="!isAuthenticated">
                     <button type="button" class="btn btn-outline-primary me-2 rounded-pill px-4" routerLink="/auth/login">Entrar</button>
-                    <button type="button" class="btn btn-primary rounded-pill px-4">Assinar</button>
+                    <button type="button" class="btn btn-primary rounded-pill px-4" routerLink="/auth/signin">Assinar</button>
                 </ng-container>
                 
                 <!-- Menu dropdown para usuários autenticados -->
-                <div *ngIf="isAuthenticated" class="dropdown">
+                <ng-container *ngIf="isAuthenticated" class="dropdown">
                     <button class="btn btn-outline-primary dropdown-toggle d-flex align-items-center gap-2" 
                             type="button" 
                             data-bs-toggle="dropdown" 
                             aria-expanded="false">
                         <i class="bi bi-person-circle fs-5"></i>
-                        <span class="d-none d-md-inline">{{ userName }}</span>
+                        <span class="d-none d-md-inline">{{ userName.slice(0, 12) }}</span>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end">
                         <li><h6 class="dropdown-header">Minha Conta</h6></li>
@@ -192,7 +192,7 @@
                             <i class="bi bi-box-arrow-right me-2"></i>Sair
                         </a></li>
                     </ul>
-                </div>
+                </ng-container>
             </div>
         </div>
     </nav>

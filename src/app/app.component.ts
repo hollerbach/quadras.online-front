@@ -31,5 +31,6 @@ export class AppComponent implements OnInit {
     }
     // Atualiza o título da página
     this.titleService.setTitle(title);
+
   }
 }
