@@ -18,8 +18,8 @@ export class AppComponent implements OnInit {
 
     // Mapeamento de domínios para títulos específicos
     switch (hostname) {
-      case 'mercearia.digital':
-        title = 'Mercearia Digital';
+      case 'quadras.online':
+        title = 'Quadras Online';
         break;
       case 'varejo.digital':
         title = 'Varejo Digital';
